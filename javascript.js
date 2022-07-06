@@ -1,30 +1,33 @@
-let readout = document.createElement("p");
-readout.innerHTML = "display";
+let readout = document.createElement("p"); //create display
 readout.id = "readout";
 document.getElementById("container").appendChild(readout);
 
-let layout = [7, 8, 9, "+", 4, 5, 6, "-", 1, 2, 3, "*", "clear", 0, "=", "/"]
-function createDisplay() {
+let layout = [7, 8, 9, "+", 4, 5, 6, "-", 1, 2, 3, "*", "clear", 0, "=", "/"] //create button text
 
-    // const display = document.createElement('div');
-    // display.innerHTML = "123456";
-    // display.className = "display";
-    // body.getElementById("display").appendChild(display);
-
-}
 function createButtons() {
     for (let i = 0; i < 16; i++) {
-        const buttons = document.createElement('button');
+        const buttons = document.createElement('button'); // create buttons
         buttons.innerHTML = layout[i];
         buttons.id = "button" + [i]; 
         buttons.className = "buttons"
+        buttons.addEventListener('click', display); //create first input
+     
+        function display() {
+            readout.textContent = layout[i]
+        }
         document.getElementById('container').appendChild(buttons);
     }
     
 }
-
-
 createButtons();
+// buttons.addEventListener('click', populate) 
+    
+// function populate();
+// if (target.className === "buttons") {
+//         display = e.target.textContent;
+//     }
+
+
 
 function add(x, y) {
     return x + y;
