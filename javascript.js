@@ -1,3 +1,31 @@
+let readout = document.createElement("p");
+readout.innerHTML = "display";
+readout.id = "readout";
+document.getElementById("container").appendChild(readout);
+
+let layout = [7, 8, 9, "+", 4, 5, 6, "-", 1, 2, 3, "*", "clear", 0, "=", "/"]
+function createDisplay() {
+
+    // const display = document.createElement('div');
+    // display.innerHTML = "123456";
+    // display.className = "display";
+    // body.getElementById("display").appendChild(display);
+
+}
+function createButtons() {
+    for (let i = 0; i < 16; i++) {
+        const buttons = document.createElement('button');
+        buttons.innerHTML = layout[i];
+        buttons.id = "button" + [i]; 
+        buttons.className = "buttons"
+        document.getElementById('container').appendChild(buttons);
+    }
+    
+}
+
+
+createButtons();
+
 function add(x, y) {
     return x + y;
 };
