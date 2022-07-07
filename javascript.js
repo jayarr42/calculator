@@ -1,25 +1,40 @@
+let storedData;
 let readout = document.createElement("p"); //create display
+readout.textContent = storedData;
 readout.id = "readout";
 document.getElementById("container").appendChild(readout);
 
-let layout = [7, 8, 9, "+", 4, 5, 6, "-", 1, 2, 3, "*", "clear", 0, "=", "/"] //create button text
+let layout = ["clear", 1, 2, 3, "+", 4, 5, 6, "-", 7, 8, 9, "*", ".", 0, "=", "/"] //create button text
 
-function createButtons() {
-    for (let i = 0; i < 16; i++) {
-        const buttons = document.createElement('button'); // create buttons
-        buttons.innerHTML = layout[i];
-        buttons.id = "button" + [i]; 
-        buttons.className = "buttons"
-        buttons.addEventListener('click', display); //create first input
-     
+
+
+function makeButtons() {
+    function createNumberButtons() {
+        for (let i = 0; i < 17; i++) {
+            const numberButtons = document.createElement('button'); // create buttons
+            numberButtons.textContent = layout[i];
+            numberButtons.id = layout[i] + " button"; 
+            numberButtons.className = "numberButtons buttons"
+            numberButtons.addEventListener('click', display); //create first input
+        
         function display() {
-            readout.textContent = layout[i]
+                readout.textContent = layout[i]
+                storedData = layout[i];
+            }
+
+            if (storedData) {       //isNaN to check if it's a number
+                console.log("hello")
+            }
+            document.getElementById('container').appendChild(numberButtons);
+
         }
-        document.getElementById('container').appendChild(buttons);
     }
-    
+    createNumberButtons();
 }
-createButtons();
+makeButtons();
+// createNumberButtons();
+// createOperationButtons();
+
 // buttons.addEventListener('click', populate) 
     
 // function populate();
@@ -58,4 +73,30 @@ function operate(choice, x, y) {
     }
 
 };
-console.log(operate("*", 7, 3))
+
+
+//tried and failed(?)
+
+
+// const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0] //create number button text
+// const operations = ["Clear", "+", "-", "*", "/", "=", "."]
+// function createOperationButtons() {
+//     for (let i = 0; i < 7; i++) {
+//         const operationButtons = document.createElement('button'); // create buttons
+//         operationButtons.innerHTML = operations[i];
+//         operationButtons.id = "operationButton" + [i]; 
+//         operationButtons.className = "operationButtons buttons"
+//         operationButtons.addEventListener('click', display); //create first input
+    
+//     function display() {
+//             readout.textContent = operations[i]
+//             storedData = operations[i];
+//         }
+
+//         if (storedData) {       //isNaN to check if it's a number
+//             console.log("hello")
+//         }
+//         document.getElementById('container').appendChild(operationButtons);
+
+//     }
+// }
