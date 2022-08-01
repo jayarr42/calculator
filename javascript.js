@@ -100,12 +100,11 @@ deleteButton.addEventListener('click', function(e) {
     if (math.x && math.operator && math.y) {
         math.secondNumArray.pop();
         y = math.secondNumArray.join('');
-        math.y = parseFloat(y);
-
-        /*---------- Here is my issue (I think)----------*/
-            if (math.secondNumArray == ['']) {          
-                math.y = '';
-            }
+        if (y == '') {
+            math.y = '';
+        } else {
+            math.y = parseFloat(y);
+        }
         console.log(math.y)
         updateDisplay();
     } else if (math.x && math.operator) {
@@ -114,7 +113,13 @@ deleteButton.addEventListener('click', function(e) {
     } else if (math.x) {
         math.firstNumArray.pop();
         x = math.firstNumArray.join('');
-        math.x = parseFloat(x);
+        console.log(x);
+        if (x == '') {
+            math.x = '';
+        } else {
+            math.x = parseFloat(x);
+        }
+
         console.log(math);
         updateDisplay();
     } 
