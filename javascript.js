@@ -1,47 +1,128 @@
-let storedData;
-let readout = document.createElement("p"); //create display
-readout.textContent = storedData;
-readout.id = "readout";
-document.getElementById("container").appendChild(readout);
+let x;
+let y;
+let operator;
+let result;
 
-let layout = ["clear", 1, 2, 3, "+", 4, 5, 6, "-", 7, 8, 9, "*", ".", 0, "=", "/"] //create button text
+let math = {
+    x: "",
+    y: "",
+    operator: "",
+    firstNumArray: [],
+    secondNumArray: [],
+};
 
 
+const bottomReadout = document.getElementById('bottomReadout');
+const topReadout = document.getElementById('topReadout');
 
-function makeButtons() {
-    function createNumberButtons() {
-        for (let i = 0; i < 17; i++) {
-            const numberButtons = document.createElement('button'); // create buttons
-            numberButtons.textContent = layout[i];
-            numberButtons.id = layout[i] + " button"; 
-            numberButtons.className = "numberButtons buttons"
-            numberButtons.addEventListener('click', display); //create first input
+const numberButtons = document.querySelectorAll('.numberButton');
+const operatorButtons = document.querySelectorAll('.operatorButton');
+const equalButton = document.getElementById('equal');
+const clearButton = document.getElementById('clear');
+const deleteButton = document.getElementById('delete');
+
+/*-------Sets the value of the operator-------*/
+operatorButtons.forEach((btn) => {
+    btn.addEventListener('click', function(e) {
+        math.operator = btn.value    
+        updateDisplay();
+        console.log(math)
         
-        function display() {
-                readout.textContent = layout[i]
-                storedData = layout[i];
-            }
-
-            if (storedData) {       //isNaN to check if it's a number
-                console.log("hello")
-            }
-            document.getElementById('container').appendChild(numberButtons);
-
+        if (math.y) {
+            math = {
+                x: result,
+                y: "",
+                operator: btn.value,
+                firstNumArray: [],
+                secondNumArray: [],
+            };
+            console.log(result);
+            bottomReadout.textContent = result;
+            updateDisplay();
+            return result;
         }
-    }
-    createNumberButtons();
+    })
+});
+/*-------Sets the value of the first and second number in relation to operator-------*/
+numberButtons.forEach((button) => {
+    button.addEventListener('click', function(ev) {
+        if (math.operator) {
+            math.secondNumArray.push(button.value);
+            y = math.secondNumArray.join('');
+            math.y = parseFloat(y);
+
+            // math.y += button.value;
+        } else {
+            math.firstNumArray.push(button.value);
+            x = math.firstNumArray.join('');
+            math.x = parseFloat(x);
+            // math.x += button.value;
+        }
+        console.log(math)
+        updateDisplay();
+
+/*-------sets solution to previous problem as new first input-------*/
+        if (math.operator) {
+            result = (operation(math.x, math.operator, math.y));
+        }
+    });
+});
+
+
+/*-------SHOULD solve the function-------*/
+equalButton.addEventListener('click', function(e){
+        if (result)
+            math = {
+                x: result,
+                y: "",
+                operator: "",
+                firstNumArray: [],
+                secondNumArray: [],
+            };
+        bottomReadout.textContent = result;
+})
+
+/*-------Clears the math object-------*/
+clearButton.addEventListener('click', function (e) {
+    math = {
+        x: "",
+        y: "",
+        operator: "",
+        firstNumArray: [],
+        secondNumArray: [],
+    };
+    bottomReadout.textContent = '';
+    updateDisplay();
+    console.log(math);
+})
+
+deleteButton.addEventListener('click', function(e) {
+    if (math.x && math.operator && math.y) {
+        math.secondNumArray.pop();
+        y = math.secondNumArray.join('');
+        math.y = parseFloat(y);
+
+        /*---------- Here is my issue (I think)----------*/
+            if (math.secondNumArray == ['']) {          
+                math.y = '';
+            }
+        console.log(math.y)
+        updateDisplay();
+    } else if (math.x && math.operator) {
+        math.operator = ""
+        updateDisplay();
+    } else if (math.x) {
+        math.firstNumArray.pop();
+        x = math.firstNumArray.join('');
+        math.x = parseFloat(x);
+        console.log(math);
+        updateDisplay();
+    } 
+})
+
+function updateDisplay() {
+    topReadout.textContent = `${math.x} ${math.operator} ${math.y}`;
 }
-makeButtons();
-// createNumberButtons();
-// createOperationButtons();
-
-// buttons.addEventListener('click', populate) 
-    
-// function populate();
-// if (target.className === "buttons") {
-//         display = e.target.textContent;
-//     }
-
 
 
 function add(x, y) {
@@ -60,43 +141,21 @@ function divide (x, y) {
     return x / y;
 };
 
-function operate(choice, x, y) {
+function operation(x, operator, y) {
 
-    if (choice == "+") {
+    if (operator == "+") {
         return add(x, y);
-    } else if (choice == "-") {
+    } else if (operator == "-") {
        return subtract(x, y);
-    } else if (choice == "*" || "x") {
+    } else if (operator == "*") {
         return multiply(x, y)
-    } else if (choice == "/") {
+    } else if (operator == "/") {
         return divide(x, y)
     }
 
 };
 
 
-//tried and failed(?)
 
 
-// const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0] //create number button text
-// const operations = ["Clear", "+", "-", "*", "/", "=", "."]
-// function createOperationButtons() {
-//     for (let i = 0; i < 7; i++) {
-//         const operationButtons = document.createElement('button'); // create buttons
-//         operationButtons.innerHTML = operations[i];
-//         operationButtons.id = "operationButton" + [i]; 
-//         operationButtons.className = "operationButtons buttons"
-//         operationButtons.addEventListener('click', display); //create first input
-    
-//     function display() {
-//             readout.textContent = operations[i]
-//             storedData = operations[i];
-//         }
-
-//         if (storedData) {       //isNaN to check if it's a number
-//             console.log("hello")
-//         }
-//         document.getElementById('container').appendChild(operationButtons);
-
-//     }
-// }
+// Your next goal is to utilize operation function. So on "=" press check if there is enough data to perform a calculation, if so do it and update display. The "trick" is that you should store result in math.x and probably reset math.y and math.operator to initial "" state.
